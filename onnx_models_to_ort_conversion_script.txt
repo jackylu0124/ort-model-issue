@@ -1,0 +1,8 @@
+# Windows PowerShell command for recursively copying everything from "onnx_models" to a new folder names "onnx_models_optimized"
+Copy-Item -Path .\onnx_models -Destination .\onnx_models_optimized -Recurse
+
+# Command for recursively converting all .onnx files in a folder to .optimized.onnx and .ort files
+python -m onnxruntime.tools.convert_onnx_models_to_ort onnx_models_optimized --optimization_style Fixed --enable_type_reduction --save_optimized_onnx_model
+
+# Windows PowerShell command for recursively deleting all files ending in .onnx (with the exception of files ending in .optimized.onnx) from the newly created "onnx_models_optimized" folder
+Get-ChildItem .\onnx_models_optimized -Recurse | Where{$_.Name -Match "^[^\.]+\.onnx$"} | Remove-Item
